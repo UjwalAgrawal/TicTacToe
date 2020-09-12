@@ -15,44 +15,61 @@ public class MainActivity extends AppCompatActivity {
     int[] gameState = {2, 2, 2, 2, 2, 2, 2, 2, 2};
     int[][] winningPositions = {{0,1,2}, {3,4,5}, {6,7,8} ,{0,3,6},{1,4,7},{2,5,8}, {0,4,8}, {2,4,6}};
     boolean gameActive = true;
+    int c=9;
 
     public void appear(View view){
         ImageView counter = (ImageView) view;
-
         int tappedCounter = Integer.parseInt(counter.getTag().toString());
-        if(gameState[tappedCounter]==2 && gameActive){    //Only one time tapping
-        gameState[tappedCounter] = activePlayer;
+        c -= 1;
+        if(c==0){
+            TextView winnerMsg = (TextView) findViewById(R.id.winnerTextView);
+            gameState[tappedCounter] = activePlayer;
 
-        if(activePlayer==0){
-        counter.setImageResource(R.drawable.cross);
-        activePlayer=1;
+            if (activePlayer == 0) {
+                counter.setImageResource(R.drawable.cross);
+                activePlayer = 1;
+            } else {
+                counter.setImageResource(R.drawable.zero);
+                activePlayer = 0;
+            }
+            counter.animate().alpha(1).setDuration(500);
+            winnerMsg.setText("Match draw!!!");
         }
         else {
-            counter.setImageResource(R.drawable.zero);
-            activePlayer=0;
-        }
-        counter.animate().alpha(1).setDuration(500);
+            if (gameState[tappedCounter] == 2 && gameActive) {    //Only one time tapping
+                gameState[tappedCounter] = activePlayer;
 
-        for(int[] winningPositon: winningPositions){
-            if(gameState[winningPositon[0]]== gameState[winningPositon[1]] && gameState[winningPositon[1]]== gameState[winningPositon[2]] && gameState[winningPositon[0]]!=2){
-                gameActive = false;
-                TextView winnerMsg = (TextView) findViewById(R.id.winnerTextView);
-                Button playAgainButton  = (Button) findViewById(R.id.playAgainButton);
-                if(activePlayer==0){
-                    winnerMsg.setText("Zero has won!!!");
+                if (activePlayer == 0) {
+                    counter.setImageResource(R.drawable.cross);
+                    activePlayer = 1;
+                } else {
+                    counter.setImageResource(R.drawable.zero);
+                    activePlayer = 0;
                 }
-                else {
-                    winnerMsg.setText("Cross has won!!!");
+                counter.animate().alpha(1).setDuration(500);
+
+                for (int[] winningPosition : winningPositions) {
+                    if (gameState[winningPosition[0]] == gameState[winningPosition[1]] && gameState[winningPosition[1]] == gameState[winningPosition[2]] && gameState[winningPosition[0]] != 2) {
+                        gameActive = false;
+                        TextView winnerMsg = (TextView) findViewById(R.id.winnerTextView);
+                        Button playAgainButton = (Button) findViewById(R.id.playAgainButton);
+                        if (activePlayer == 0) {
+                            winnerMsg.setText("Zero has won!!!");
+                        } else {
+                            winnerMsg.setText("Cross has won!!!");
+                        }
+                    }
                 }
             }
         }
-        }
     }
 
+    //Resets the everything
     public void play(View view){
         TextView winnerMsg = (TextView) findViewById(R.id.winnerTextView);
         Button playAgainButton  = (Button) findViewById(R.id.playAgainButton);
         GridLayout boardGridLayout  = findViewById(R.id.gridLayout);
+        c=9;
         for(int i=0; i<boardGridLayout.getChildCount(); i++){
             ImageView imgView = (ImageView) boardGridLayout.getChildAt(i);
             imgView.setImageDrawable(null);
