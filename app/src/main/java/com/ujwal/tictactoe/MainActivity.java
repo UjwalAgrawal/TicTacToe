@@ -20,22 +20,7 @@ public class MainActivity extends AppCompatActivity {
     public void appear(View view){
         ImageView counter = (ImageView) view;
         int tappedCounter = Integer.parseInt(counter.getTag().toString());
-        c -= 1;
-        if(c==0){
-            TextView winnerMsg = (TextView) findViewById(R.id.winnerTextView);
-            gameState[tappedCounter] = activePlayer;
-
-            if (activePlayer == 0) {
-                counter.setImageResource(R.drawable.cross);
-                activePlayer = 1;
-            } else {
-                counter.setImageResource(R.drawable.zero);
-                activePlayer = 0;
-            }
-            counter.animate().alpha(1).setDuration(500);
-            winnerMsg.setText("Match draw!!!");
-        }
-        else {
+        c-=1;
             if (gameState[tappedCounter] == 2 && gameActive) {    //Only one time tapping
                 gameState[tappedCounter] = activePlayer;
 
@@ -60,9 +45,13 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+                if(c==0 && gameActive){
+                    TextView winnerMsg = (TextView) findViewById(R.id.winnerTextView);
+                    winnerMsg.setText("Match draw!!!");
+                }
             }
         }
-    }
+
 
     //Resets the everything
     public void play(View view){
